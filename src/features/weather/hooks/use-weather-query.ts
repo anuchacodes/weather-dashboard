@@ -1,33 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { openMeteoClient } from "@/features/weather/services/open-meteo-client";
-import type { WeatherLocation } from "@/features/weather/types/weather";
+import { WEATHER_REFETCH_INTERVAL } from "@/features/weather/constants";
+import { weatherQueryKeys } from "@/features/weather/query-keys";
+import { getWeatherForecast } from "@/features/weather/services/weather-service";
+import type {
+  TemperatureUnit,
+  WeatherLocation,
+} from "@/features/weather/types/weather";
 
-type ForecastResponse = {
-  current?: Record<string, number | string>;
-  hourly?: Record<string, Array<number | string>>;
-};
-
-export function useWeatherQuery(location: WeatherLocation) {
+export function useWeatherQuery(
+  location: WeatherLocation,
+  unit: TemperatureUnit,
+) {
   return useQuery({
-    queryKey: ["weather", location.latitude, location.longitude],
-    queryFn: async () => {
-      const { data } = await openMeteoClient.get<ForecastResponse>(
-        "/forecast",
-        {
-          params: {
-            latitude: location.latitude,
-            longitude: location.longitude,
-            timezone: location.timezone,
-            current:
-              "temperature_2m,relative_humidity_2m,wind_speed_10m,surface_pressure",
-            hourly: "temperature_2m,relative_humidity_2m,wind_speed_10m",
-          },
-        },
-      );
-
-      return data;
-    },
-    refetchInterval: 300_000,
+    queryKey: weatherQueryKeys.forecast(location, unit),
+    queryFn: () => getWeatherForecast(location, unit),
+    refetchInterval: WEATHER_REFETCH_INTERVAL,
+    retry: 2,
   });
 }

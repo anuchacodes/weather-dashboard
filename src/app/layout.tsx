@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import { Kanit } from "next/font/google";
 import "./globals.css";
 
 import { Providers } from "@/components/shared/providers";
 
+const kanit = Kanit({
+  subsets: ["thai", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-kanit",
+});
+
 export const metadata: Metadata = {
-  title: "Weather Monitoring Dashboard",
-  description: "Modern weather monitoring dashboard powered by Open-Meteo.",
+  title: "แดชบอร์ดสภาพอากาศ",
+  description: "แดชบอร์ดติดตามสภาพอากาศจาก Open-Meteo",
 };
 
 export default function RootLayout({
@@ -14,8 +21,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body>
+    <html lang="th" suppressHydrationWarning>
+      <body className={kanit.variable}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -8,6 +8,12 @@ Weather data is planned around the [Open-Meteo API](https://open-meteo.com/).
 
 ## Getting Started
 
+Create `.env.local`:
+
+```bash
+NEXT_PUBLIC_API_BASE_URL=https://api.open-meteo.com/v1
+```
+
 ```bash
 npm install
 npm run dev
